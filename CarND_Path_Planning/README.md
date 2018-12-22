@@ -1,5 +1,53 @@
 # CarND-Path-Planning-Project
 Self-Driving Car Engineer Nanodegree Program
+
+### Overview
+
+The goal of this project is to navigate a car around a simulated highway scenario, including traffic and given waypoint, telemetry, and sensor fusion data. The car must not violate a set of motion constraints, namely maximum velocity, maximum acceleration, and maximum jerk, while also avoiding collisions with other vehicles, keeping to within a highway lane (aside from short periods of time while changing lanes), and changing lanes when doing so is necessary to maintain a speed near the posted speed limit.
+
+In an Project Driving pipeline we deal sequentially with the following modules:
+
+- **perception**: sensors in charge of detecting objects
+- **fusion**: sensor fusion providing a consolidated view of detected objects
+- **localization**:
+- **path planning**: in charge of planning the vehicle trajectory up to a specific goal
+- **command and control**: taking as inputs the planned path it will control the actuators of the vehicle
+
+The path planning module is using as inputs:
+
+the sensor fusion outputs
+the map and localization
+It then provides as output a set of waypoints to follow.
+
+The Path Planning module is typically decomposed into the following set of sub-modules:
+
+- **predictions**: will predict the trajectories of the surrounding detected objects
+- **behavior planner**: will define a set of candidate high-level targets for the vehicle to follow (lane changes, slow down ...)
+- **trajectories generation**: for every possible high level target, a precise path to follow will be computed
+- **trajectories cost ranking**: for each trajectory, a cost will be derived (depending on feasibility, safety, legality, comfort, and efficiency) and the trajectory with the lowest cost will be chosen.
+
+**Model Documentation**
+**The code consist of three parts**:
+
+Prediction:
+This part of the code deal with the telemetry and sensor fusion data. 
+Detecting the objects around and fusion of the consolidated surounding. 
+
+look for the blocking Car in same lane or understand the feasiablity for Lane change in both sides (Laft and Right )
+
+These questions are answered by calculating the lane each other car is and the position it will be at the end of the last plan trajectory. A car is considered "dangerous" when its distance to our car is less than 30 meters in front or behind us.
+
+Behavior:
+This part decides what to do:
+
+Taking a right decisoin to change the Lane or slow down or Accelerate.
+
+Based on the prediction of the situation we are in, this code increases the speed, decrease speed, or make a lane change when it is safe. Instead of increasing the speed at this part of the code, a speed_diff is created to be used for speed changes when generating the trajectory in the last part of the code. This approach makes the car more responsive acting faster to changing situations like a car in front of it trying to apply breaks to cause a collision.
+
+Trajectory:
+This code does the calculation of the trajectory based on the speed and lane output from the behavior, car coordinates and past path points.
+
+First, the last two points of the previous trajectory are used in conjunction three points at a far distance to initialize the spline calculation. To make the work less complicated to the spline calculation based on those points, the coordinates are transformed (shift and rotation) to local car coordinates. as discussed in the lessons.In order to ensure more continuity on the trajectory, the pass trajectory points are copied to the new trajectory. The rest of the points are calculated by evaluating the spline and transforming the output coordinates to not local coordinates.
    
 ### Simulator.
 You can download the Term3 Simulator which contains the Path Planning Project from the [releases tab (https://github.com/udacity/self-driving-car-sim/releases/tag/T3_v1.2).
