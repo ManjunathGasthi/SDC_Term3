@@ -27,6 +27,8 @@ The Path Planning module is typically decomposed into the following set of sub-m
 - **trajectories cost ranking**: for each trajectory, a cost will be derived (depending on feasibility, safety, legality, comfort, and efficiency) and the trajectory with the lowest cost will be chosen.
 
 **Model Documentation**
+![Alt text](https://github.com/ManjunathGasthi/SDC_Term3/blob/master/CarND_Path_Planning/path_plan.PNG "Path Planning")
+
 **The code consist of three parts**:
 
 Prediction:
